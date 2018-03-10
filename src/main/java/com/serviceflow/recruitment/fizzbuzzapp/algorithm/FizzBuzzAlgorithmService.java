@@ -1,6 +1,5 @@
 package com.serviceflow.recruitment.fizzbuzzapp.algorithm;
 
-import java.util.List;
 import java.util.Map;
 
 public interface FizzBuzzAlgorithmService {

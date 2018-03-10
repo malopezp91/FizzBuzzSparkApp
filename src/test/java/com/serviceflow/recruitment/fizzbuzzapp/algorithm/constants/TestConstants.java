@@ -1,4 +1,4 @@
-package com.serviceflow.recruitment.fizzbuzzapp.algorithm;
+package com.serviceflow.recruitment.fizzbuzzapp.algorithm.constants;
 
 import java.util.HashMap;
 import java.util.Map;
