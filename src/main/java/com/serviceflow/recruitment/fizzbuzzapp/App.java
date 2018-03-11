@@ -30,18 +30,34 @@ public class App {
 	public static void main(String[] args) {
 		Injector injector = Guice.createInjector(new FizzBuzzModule());
 
-		get("/health", (req, res) -> "Hello World");
+		port(getHerokuAssignedPort());
+		
+		options("/*", (request, response) -> {
+
+			String accessControlRequestHeaders = request.headers("Access-Control-Request-Headers");
+			if (accessControlRequestHeaders != null) {
+				response.header("Access-Control-Allow-Headers", accessControlRequestHeaders);
+			}
+
+			String accessControlRequestMethod = request.headers("Access-Control-Request-Method");
+			if (accessControlRequestMethod != null) {
+				response.header("Access-Control-Allow-Methods", accessControlRequestMethod);
+			}
+
+			return "OK";
+		});
+		
+		before((request, response) -> response.header("Access-Control-Allow-Origin", "*"));
+		
+		get("/health", (req, res) -> "FizzBuzzApp is up and running!");
 
 		post("/fizzbuzz/long", (request, response) -> {
-			System.out.println("Request body is: " + request.body());
-
 			try {
+				
 				LongListResponse stuff = injector.getInstance(AppServiceImpl.class)
 						.processLongListResponse(request.body());
 
 				System.out.println(stuff);
-
-				// response.status(404);
 
 				return stuff;
 				// return new ResponseMessage(stuff);
@@ -64,4 +80,13 @@ public class App {
 			return new ResponseMessage("Error");
 		}, new JsonTransformer());
 	}
+	
+	static int getHerokuAssignedPort() {
+        ProcessBuilder processBuilder = new ProcessBuilder();
+        if (processBuilder.environment().get("PORT") != null) {
+        	System.out.println("Heroku assigned port is: " + processBuilder.environment().get("PORT"));
+            return Integer.parseInt(processBuilder.environment().get("PORT"));
+        }
+        return 4567; //return default port if heroku-port isn't set (i.e. on localhost)
+    }
 }
