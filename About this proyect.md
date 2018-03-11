@@ -34,9 +34,21 @@ The other Endpoint was intended for high traffic. Instead of retrieving a String
 
 {"fizzBuzz":{"3":"Fizz","5":"Buzz","6":"Fizz","9":"Fizz","10":"Buzz"}}
 
+#### API
+
+ - Get Long List
+
+| Endpoint  | https://boiling-sands-95787.herokuapp.com/fizzbuzz/long?number= |
+| Response | {"fizzBuzz":"1 2 Fizz 4 Buzz Fizz 7 8 Fizz Buzz"}|
+|    Errors    | 400 - {"message":"Number Parameter is invalid"} |
+|    Errors    | 400 - {"message":"Number Parameter exceeded limit of 10000"} |
+
+ - Get Short List
+ 
+ | Endpoint | https://boiling-sands-95787.herokuapp.com/fizzbuzz/short?number= |
+| Response | {"fizzBuzz":{"3":"Fizz","5":"Buzz","6":"Fizz","9":"Fizz","10":"Buzz"}}|  
+| Errors | 400 - {“message”:“Number Parameter is invalid”} |  
 
 #### Another approach
 Due of lack of time, I couldn't explore another approach, which used Information At Rest. In this approach, when a request is received, a json file with all FizzBuzz numbers is stored in the Server. When another request is received looking for the same number, this file is sent to the cliend and the FizzBuzz algorithm won't be executed. 
 This approach can go further by placing the json file into an external repository, such as AWS S3, so instead of retrieving the FizzBuzz numbers from my server, the client will retrieve a URL from S3 where he can look for the data.
-
-
