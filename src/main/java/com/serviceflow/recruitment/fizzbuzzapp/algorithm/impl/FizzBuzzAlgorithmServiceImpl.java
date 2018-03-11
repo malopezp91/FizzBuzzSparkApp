@@ -5,14 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import com.serviceflow.recruitment.fizzbuzzapp.Constants;
 import com.serviceflow.recruitment.fizzbuzzapp.algorithm.FizzBuzzAlgorithmService;
 
 public class FizzBuzzAlgorithmServiceImpl implements FizzBuzzAlgorithmService {
-
-	@Override
-	public String createFizzBuzzForGivenNumber(Integer number) {
-		return "1 2 3 4";
-	}
 
 	@Override
 	public String getFizzBuzzAsFullList(Long number) {
@@ -22,10 +18,10 @@ public class FizzBuzzAlgorithmServiceImpl implements FizzBuzzAlgorithmService {
 			
 			if (i % 3 == 0 || i % 5 == 0){
 				if (i % 3 == 0){
-					fizzBuzzString.append(Constants.fizz);
+					fizzBuzzString.append(Constants.FIZZ);
 				} 
 				if (i % 5 == 0){
-					fizzBuzzString.append(Constants.buzz);
+					fizzBuzzString.append(Constants.BUZZ);
 				}
 			}
 			
@@ -44,13 +40,13 @@ public class FizzBuzzAlgorithmServiceImpl implements FizzBuzzAlgorithmService {
 		
 		for (long i = 1; i <= number; i++){
 			if (i % 3 == 0 && i % 5 == 0){
-				fizzBuzzMap.put(i, Constants.fizz + Constants.buzz);
+				fizzBuzzMap.put(i, Constants.FIZZ + Constants.BUZZ);
 			}
 			else if (i % 3 == 0){
-				fizzBuzzMap.put(i, Constants.fizz);
+				fizzBuzzMap.put(i, Constants.FIZZ);
 			}
 			else if (i % 5 == 0){
-				fizzBuzzMap.put(i, Constants.buzz);
+				fizzBuzzMap.put(i, Constants.BUZZ);
 			}
 		}
 		return fizzBuzzMap;

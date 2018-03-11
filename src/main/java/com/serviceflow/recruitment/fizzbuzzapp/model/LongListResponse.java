@@ -1,19 +1,20 @@
 package com.serviceflow.recruitment.fizzbuzzapp.model;
 
-import java.util.Map;
 
 public class LongListResponse {
-	Map<Long, String> longListResponse;
+	String fizzBuzz;
+	
+	public String getFizzBuzz() {
+		return fizzBuzz;
+	}
 
-	public LongListResponse (Map<Long, String> longListResponse){
-		this.longListResponse = longListResponse;
+	public void setFizzBuzz(String fizzBuzz) {
+		this.fizzBuzz = fizzBuzz;
+	}
+
+	public LongListResponse (String fizzBuzz){
+		this.fizzBuzz = fizzBuzz;
 	}
 	
-	public Map<Long, String> getLongListResponse() {
-		return longListResponse;
-	}
-
-	public void setLongListResponse(Map<Long, String> longListResponse) {
-		this.longListResponse = longListResponse;
-	}
+	
 }

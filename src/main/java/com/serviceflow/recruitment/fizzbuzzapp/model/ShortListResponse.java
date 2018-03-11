@@ -3,17 +3,18 @@ package com.serviceflow.recruitment.fizzbuzzapp.model;
 import java.util.Map;
 
 public class ShortListResponse {
-	Map<Long, Map<Long, String>> shortListResponse;
+	Map<Long, String> fizzBuzz;
 
-	public ShortListResponse(Map<Long, Map<Long, String>> shortListResponse){
-		this.shortListResponse = shortListResponse;
+	public Map<Long, String> getFizzBuzz() {
+		return fizzBuzz;
+	}
+
+	public void setFizzBuzz(Map<Long, String> fizzBuzz) {
+		this.fizzBuzz = fizzBuzz;
+	}
+
+	public ShortListResponse(Map<Long,String> fizzBuzz){
+		this.fizzBuzz = fizzBuzz;
 	}
 	
-	public Map<Long, Map<Long, String>> getShortListResponse() {
-		return shortListResponse;
-	}
-
-	public void setShortListResponse(Map<Long, Map<Long, String>> shortListResponse) {
-		this.shortListResponse = shortListResponse;
-	}
 }

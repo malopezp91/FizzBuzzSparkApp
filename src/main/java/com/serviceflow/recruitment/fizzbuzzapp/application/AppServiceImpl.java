@@ -1,81 +1,60 @@
 package com.serviceflow.recruitment.fizzbuzzapp.application;
 
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
 import com.google.inject.Inject;
+import com.serviceflow.recruitment.fizzbuzzapp.Constants;
 import com.serviceflow.recruitment.fizzbuzzapp.algorithm.FizzBuzzAlgorithmService;
-import com.serviceflow.recruitment.fizzbuzzapp.exceptions.InvalidNumberInRequestException;
+import com.serviceflow.recruitment.fizzbuzzapp.exceptions.InvalidNumberParamException;
+import com.serviceflow.recruitment.fizzbuzzapp.exceptions.ParamNumberExceedsLimit;
 import com.serviceflow.recruitment.fizzbuzzapp.model.LongListResponse;
-import com.serviceflow.recruitment.fizzbuzzapp.model.RequestNumbers;
 import com.serviceflow.recruitment.fizzbuzzapp.model.ShortListResponse;
 
-public class AppServiceImpl implements AppService{
+public class AppServiceImpl implements AppService {
 
 	@Inject
 	FizzBuzzAlgorithmService processor;
 
-	private Gson gson = new Gson();
-	
 	@Override
-	public LongListResponse processLongListResponse(String values) throws InvalidNumberInRequestException {
+	public LongListResponse processLongListResponse(String paramFromQuery) throws  InvalidNumberParamException, ParamNumberExceedsLimit {
+		Long numberParam = validateRequestParameter(paramFromQuery, "long");
 		
-		Long[] numbers = null;
-		//Extract Values from request
-		try{
-			numbers = validateBodyRequestContainsValidNumbers(values);
-		}
-		catch(InvalidNumberInRequestException e){
-			throw e;
-		}
+		String longListResponse = processor.getFizzBuzzAsFullList(numberParam);
+		System.out.println("Long List generated for:" + numberParam);
 		
-		Map<Long, String> mapOfResponses = new HashMap<>();
-		
-		Arrays.stream(numbers).forEach( number -> {
-			mapOfResponses.put(number, processor.getFizzBuzzAsFullList(number));
-		});
-		
-		return new LongListResponse(mapOfResponses);
+		return new LongListResponse(longListResponse);
 	}
 
 	@Override
-	public ShortListResponse processShortListResponse(String values) throws InvalidNumberInRequestException{
-		Long[] numbers = null;
-		//Extract Values from request
-		try{
-			numbers = validateBodyRequestContainsValidNumbers(values);
-		}
-		catch(InvalidNumberInRequestException e){
-			throw e;
-		}
+	public ShortListResponse processShortListResponse(String paramFromQuery) throws InvalidNumberParamException, ParamNumberExceedsLimit {
+		Long numberParam = validateRequestParameter(paramFromQuery, "short");
 		
-		Map<Long, Map<Long, String>> mapOfResponses = new HashMap<>();
-		Arrays.stream(numbers).forEach( number -> {
-			mapOfResponses.put(number, processor.getFizzBuzzAsShortList(number));
-		});
+		Map<Long, String> shortListResponse = processor.getFizzBuzzAsShortList(numberParam);
+		System.out.println("Short List generated for:" + numberParam);
 		
-		return new ShortListResponse(mapOfResponses);
-		
-		
+		return new ShortListResponse(shortListResponse);
 	}
-	
-	private Long[] validateBodyRequestContainsValidNumbers(String values) throws InvalidNumberInRequestException{
-		
-		RequestNumbers numbersFromRequest = gson.fromJson(values, RequestNumbers.class);
-		
-		Long[] numbers = numbersFromRequest.getNumber();
-		
-		for(int i = 0; i< numbers.length; i++){
-			if (numbers[i] == 0 || !(numbers[i] instanceof Long) ){
-				throw new InvalidNumberInRequestException();
-			}
+
+	private Long validateRequestParameter(String param, String mode)
+			throws InvalidNumberParamException, ParamNumberExceedsLimit {
+		// First Parse param number
+		Long numberParam = null;
+		try {
+			numberParam = new Long(param);
+		} catch (Exception e) {
+			throw new InvalidNumberParamException();
 		}
-		
-		return numbers;
+		if (mode == "long") {
+			if (numberParam <= Constants.LONG_LIMIT) {
+				return numberParam;
+			} else
+				throw new ParamNumberExceedsLimit();
+
+		} else if (mode == "short") {
+			return numberParam;
+		}
+
+		throw new RuntimeException();
 	}
 
 }
